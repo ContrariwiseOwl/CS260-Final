@@ -41,7 +41,9 @@ router.post("/", validUser, upload.single('photo'), async (req, res) => {
     });
     try {
         await photo.save();
-        return res.sendStatus(200);
+        return res.status(200).send({
+            imgId: photo._id
+        });
     } catch (error) {
         console.log(error);
         return res.sendStatus(500);
@@ -72,6 +74,18 @@ router.get("/:id", async (req, res) => {
     } catch (error) {
         console.log(error);
         return res.sendStatus(500);
+    }
+});
+
+router.delete("/:id", validUser, async (req, res) => {
+    try {
+        await ProfileImg.deleteOne({
+            _id: req.params.id
+        });
+        res.sendStatus(200);
+    } catch (error) {
+        console.log(error);
+        res.sendStatus(500);
     }
 });
 

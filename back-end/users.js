@@ -149,6 +149,19 @@ router.post('/login', async (req, res) => {
         }
 });
 
+// update profile img
+router.put('/:id', validUser, async (req, res) => {
+    try {
+        let user = req.user;
+        user.profileImg = req.params.id;
+        await user.save();
+        res.sendStatus(200);
+    } catch (error) {
+        console.log(error);
+        res.sendStatus(500);
+    }
+})
+
 // get logged in user
 router.get('/', validUser, async (req, res) => {
     try {
