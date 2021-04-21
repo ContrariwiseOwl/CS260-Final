@@ -52,7 +52,7 @@ import Login from '@/components/Login.vue'
 import axios from 'axios'
 
 export default {
-    name: 'dashboard',
+    name: 'Dashboard',
     components: {
 
     },

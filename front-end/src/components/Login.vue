@@ -29,3 +29,30 @@
     </form>
 </div>
 </template>
+
+<script>
+
+export default {
+    name: 'Login',
+    data() {
+        return {
+            usernameLogin: '',
+            passwordLogin: '',
+            firstName: '',
+            lastName: '',
+            username: '',
+            password: '',
+            error: '',
+            errorLogin: ''
+        }
+    },
+    methods: {
+
+    },
+    computed: {
+        user() {
+            return this.$root.$data.user;
+        }
+    }
+}
+</script>
