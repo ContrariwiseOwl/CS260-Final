@@ -9,9 +9,11 @@
             <b-navbar-nav>
                 <b-nav-item to="/">Home</b-nav-item>
                 <b-nav-item to="/userpoetry">User poetry</b-nav-item>
-                <b-nav-item to="/mypoetry">My Poetry</b-nav-item>
                 <b-nav-item to="/dailypoem">Daily Poem</b-nav-item>
                 <b-nav-item to="/poetryhouse">Poetry House</b-nav-item>
+                <b-nav-item v-if="user" to="/mypoetry">My Poetry</b-nav-item>
+                <b-nav-item v-if="user" to="/dashboard">My Account</b-nav-item>
+                <b-nav-item v-else to="/dashboard">Log In</b-nav-item>
 
                 <!--<b-nav-item-dropdown text="Great Poets" right>
                     <b-dropdown-item href="#">Maya Angelou</b-dropdown-item>
@@ -36,7 +38,7 @@
     <router-view/>
 
     <div class="github footer">
-        <a href="https://github.com/ContrariwiseOwl/CS260-CP3">Github Repository</a>
+        <a href="https://github.com/ContrariwiseOwl/CS260-Final">Github Repository</a>
     </div>
   </div>
 </template>
@@ -75,6 +77,11 @@ export default {
         externalScript.setAttribute('href', "https://fonts.googleapis.com/css2?family=Kanit:wght@300&display=swap");
         document.head.appendChild(externalScript);
     },
+    computed: {
+        user() {
+            return this.$root.$data.user;
+        }
+    }
 }
 </script>
 

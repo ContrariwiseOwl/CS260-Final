@@ -49,6 +49,35 @@
             </form>
             <PoetryList :poems="poems" />
         </div>
+
+        <div class="resources">
+            <div class="resource">
+                <h6>Writing</h6>
+                <ul>
+                    <li><a href="https://www.poetryfoundation.org/learn/glossary-terms">Poetic Glossary</a></li>
+                    <li><a href="https://www.merriam-webster.com/">Dictionary</a></li>
+                    <li><a href="https://www.merriam-webster.com/thesaurus">Thesaurus</a></li>
+                    <li><a href="https://www.rhymezone.com/">Rhymezone</a></li>
+                </ul>
+            </div>
+            <div class="resource">
+                <h6>Inspiration</h6>
+                <ul>
+                    <li>Go Outside</li>
+                    <li><a href="">Great Poets</a></li>
+                    <li><a href="https://writingexercises.co.uk/subjectgenerator.php">Subject Generator</a></li>
+                    <li><a href="https://www.orwellfoundation.com/the-orwell-foundation/orwell/essays-and-other-works/why-i-write/">Orwell's <em>Why I Write</em></a></li>
+                </ul>
+            </div>
+            <div class="resource">
+                <h6>Community</h6>
+                <ul>
+                    <li><a href="https://www.poetryfoundation.org">Poetry Foundation</a></li>
+                    <li><a href="#">I Heart Poetry Forums</a></li>
+                    <li>Call Your Mom</li>
+                </ul>
+            </div>
+        </div>
     </div>
 </div>
 </template>

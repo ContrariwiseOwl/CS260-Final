@@ -12,7 +12,7 @@ Vue.use(IconsPlugin)
 Vue.config.productionTip = false;
 
 let data = {
-    poems: mock,
+    user: null
 }
 
 new Vue({

@@ -5,6 +5,7 @@ import UserPoetry from '../views/UserPoetry.vue'
 import MyPoetry from '../views/MyPoetry.vue'
 import DailyPoem from '../views/DailyPoem.vue'
 import PoetryHouse from '../views/PoetryHouse.vue'
+import Dashboard from '../views/Dashboard.vue'
 
 Vue.use(VueRouter)
 
@@ -33,6 +34,11 @@ const routes = [
     path: '/poetryhouse',
     name: 'PoetryHouse',
     component: PoetryHouse
+  },
+  {
+    path: '/dashboard',
+    name: 'Dashboard',
+    component: Dashboard
   }
 ]
 
