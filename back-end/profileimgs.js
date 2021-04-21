@@ -12,6 +12,7 @@ const upload = multer({
 });
 
 const users = require("./users.js");
+const User = users.model;
 const validUser = users.valid;
 
 const profileImgSchema = new mongoose.Schema({
