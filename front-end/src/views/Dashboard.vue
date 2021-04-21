@@ -54,7 +54,7 @@ import axios from 'axios'
 export default {
     name: 'Dashboard',
     components: {
-
+        Login
     },
     async created() {
         try {

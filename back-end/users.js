@@ -10,7 +10,11 @@ const userSchema = new mongoose.Schema({
     lastName: String,
     username: String,
     password: String,
-    profileImgPath: String
+    namePreference: Boolean,
+    profileImgPath: {
+        type: String,
+        default: ''
+    }
 });
 
 userSchema.pre('save', async function(next) {
@@ -94,7 +98,8 @@ router.post('/', async (req, res) => {
             firstName: req.body.firstName,
             lastName: req.body.lastName,
             username: req.body.username,
-            password: req.body.password
+            password: req.body.password,
+            namePreference: req.body.namePreference
         });
         await user.save();
         // set user session info

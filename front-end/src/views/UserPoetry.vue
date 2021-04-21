@@ -10,7 +10,7 @@
                     submitted their work for us to show the world! If you would like to submit your own poetry, go to the "My Poetry" page.
                 </p>
             </div>
-            <PoetryList :poems="this.$root.$data.poems"/>
+            <PoetryList :poems="poems"/>
 
             <div class="resources">
                 <div class="resource">
@@ -46,11 +46,33 @@
 
 <script>
 import PoetryList from '/src/components/PoetryList.vue'
+import axios from 'axios'
 
 export default {
     name: 'UserPoetry',
     components: {
         PoetryList
+    },
+    data() {
+        return {
+            poems: [],
+            error: ''
+        }
+    },
+    created() {
+        this.getPoems();
+    },
+    methods: {
+        async getPoems() {
+            this.error = '';
+
+            try {
+                let response = await axios.get("/api/poems/all");
+                this.poems = response.data;
+            } catch (error) {
+                this.error = error.response.data.message;
+            }
+        }
     }
 }
 </script>

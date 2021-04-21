@@ -53,7 +53,6 @@ export default {
         .then(function(response) {
             return response.json();
         }).then(function(json) {
-            console.log(json);
             let results = "";
 
             results += '<p><strong>' + json[0].title + "</strong> by " + json[0].author + '</p>';
