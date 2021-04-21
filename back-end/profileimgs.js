@@ -42,9 +42,9 @@ router.post("/", validUser, upload.single('photo'), async (req, res) => {
     });
     try {
         await photo.save();
-        return res.status(200).send({
+        return res.status(200)/*.send({
             imgId: photo._id
-        });
+        })*/;
     } catch (error) {
         console.log(error);
         return res.sendStatus(500);

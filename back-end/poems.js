@@ -6,7 +6,7 @@ const users = require("./users.js");
 const User = users.model;
 const validUser = users.valid;
 
-const poemSchema = mongoose.schema({
+const poemSchema = mongoose.Schema({
     title: String,
     content: Array,
     author: {
@@ -31,19 +31,21 @@ router.post('/', validUser, async (req, res) => {
             message: "Poems require a title and at least one line of content."
         });
 
-    if (req.body.form === "")
+    if (req.body.form === "") {
         let poem = new Poem({
             title: req.body.title,
             content: req.body.content,
             author: req.user
         });
-    else
+    }
+    else {
         let poem = new Poem({
             title: req.body.title,
             content: req.body.content,
             author: req.user,
             form: req.body.form
         });
+    }
 
     try {
         await poem.save();
@@ -111,19 +113,21 @@ router.post("/", validUser, async (req, res) => {
                 message: "You may not post poems with duplicate titles."
             });
 
-        if (req.body.form !== "")
+        if (req.body.form !== "") {
             let poem = new Poem({
                 title: req.body.title,
                 content: req.body.content,
                 author: req.user,
             });
-        else
+        }
+        else {
             let poem = new Poem({
                 title: req.body.title,
                 content: req.body.content,
                 author: req.user,
                 form: req.body.form
             });
+        }
     } catch (error) {
         console.log(error);
         return res.sendStatus(500);

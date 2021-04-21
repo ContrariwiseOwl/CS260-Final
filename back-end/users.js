@@ -4,19 +4,13 @@ const argon2 = require ("argon2");
 
 const router = express.Router();
 
-const profileImg = require("./profileimgs.js");
-const ProfileImg = profileImg.model;
-
 // user schema. Passwords are salted and hashed before being saved!
 const userSchema = new mongoose.Schema({
     firstName: String,
     lastName: String,
     username: String,
     password: String,
-    profileImg: {
-        type: mongoose.Schema.ObjectId,
-        ref: 'ProfileImg'
-    }
+    profileImgPath: String
 });
 
 userSchema.pre('save', async function(next) {
@@ -50,7 +44,7 @@ userSchema.methods.toJSON =  function() {
     return obj;
 }
 
-const user = mongoose.model('User', userSchema);
+const User = mongoose.model('User', userSchema);
 
 /* Middleware */
 const validUser = async (req, res, next) => {
@@ -150,10 +144,10 @@ router.post('/login', async (req, res) => {
 });
 
 // update profile img
-router.put('/:id', validUser, async (req, res) => {
+router.put('/:file', validUser, async (req, res) => {
     try {
         let user = req.user;
-        user.profileImg = req.params.id;
+        user.profileImgPath = "/images/profiles/" + req.params.file;
         await user.save();
         res.sendStatus(200);
     } catch (error) {
