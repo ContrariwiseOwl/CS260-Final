@@ -10,7 +10,7 @@
                     submitted their work for us to show the world! If you would like to submit your own poetry, go to the "My Poetry" page.
                 </p>
             </div>
-            <PoetryList :poems="poems"/>
+            <PoetryList :poems="poems" :deleteButton="false"/>
 
             <div class="resources">
                 <div class="resource">

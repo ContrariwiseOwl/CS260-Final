@@ -86,7 +86,7 @@ router.get("/:id", async (req, res) => {
     try {
         let poem = await Poem.findOne({
             _id: req.params.id
-        });
+        }).populate('author');
         if (!poem)
             return res.status(404).send({
                 message: "No poem could be found"
@@ -97,6 +97,25 @@ router.get("/:id", async (req, res) => {
         return res.status(500);
     }
 });
+
+// get a single poem for editing
+router.get("/edit/:id", validUser, async (req, res) => {
+    try {
+        let poem = await Poem.findOne({
+            _id: req.params.id,
+            author: req.user
+        });
+        if (!poem)
+            return res.status(404).send({
+                message: "No matching poem could be found"
+            });
+
+        return res.send(poem);
+    } catch (error) {
+        console.log(error);
+        return res.status(500);
+    }
+})
 
 // update an edited poem
 router.put("/:id", validUser, async (req, res) => {

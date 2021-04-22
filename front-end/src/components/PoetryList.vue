@@ -16,7 +16,8 @@
 export default {
     name: 'PoetryList',
     props: {
-        poems: Array
+        poems: Array,
+        deleteButton: Boolean
     },
 }
 </script>

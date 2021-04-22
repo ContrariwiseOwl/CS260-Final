@@ -6,12 +6,19 @@ the profile picture uploader thing.
     <div class="background-page">
         <div class="main-page">
             <div class="logo-box mini-logo-title">
-                <img src="/images/logo-mobile.png"/>
+                <img src="../../legacy/images/logo-mobile.png"/>
                 <h1 v-if="!user">Account Login</h1>
                 <h1 v-else>Account Dashboard</h1>
             </div>
 
             <div v-if="user" class="account-info">
+                <div class="profile">
+                    <h3>Profile</h3>
+                    <p>{{user.firstName}} {{user.lastName}}</p>
+                    <p>Username: {{user.username}}</p>
+                    <p v-if="user.namePreference">Pen Name: {{user.firstName}} {{user.lastName}}</p>
+                    <p v-else>Pen Name: {{user.username}}</p>
+                </div>
             </div>
             <Login v-else />
 

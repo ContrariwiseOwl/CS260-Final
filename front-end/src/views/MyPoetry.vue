@@ -2,11 +2,12 @@
 <div class="background-page">
     <div class="main-page">
         <div class="logo-box mini-logo-title">
-                    <img src="/images/logo-mobile.png"/>
-                    <h1>My Poetry</h1>
-                </div>
+            <img src="/images/logo-mobile.png"/>
+            <h1>My Poetry</h1>
+        </div>
+        
         <div class="welcome">
-            <p>Write, edit, and submit your own poetry.</p>
+            <p>Welcome to <em>your</em> section of the site, where you can write, edit, and submit your own poetry.</p>
         </div>
         
         <div class="wrapper">
@@ -36,11 +37,11 @@
                 </form>
                 <p v-if="editId == -1">No poem with provided title has this user as its author.</p>
             </div>
-            <PoemEditor v-if="editId !== null && editId !== -1" :poem="this.$root.$data.poems[editId - 1]"/>
-            <form v-if="editId !== null && editId !== -1" v-on:submit.prevent="closeEditor" style="margin-bottom: 20px;">
+            <PoemEditor v-if="editId !== null && editId !== -1" :poem="poem" v-on:close-editor="closeEditor()"/>
+            <!--<form v-if="editId !== null && editId !== -1" v-on:submit.prevent="closeEditor" style="margin-bottom: 20px;">
                 <button type="submit">Close Editor</button>
-            </form>
-            <PoetryList :poems="poems" />
+            </form>-->
+            <PoetryList :poems="poems" :deleteButton="true"/>
         </div>
 
         <div class="resources">
@@ -90,6 +91,7 @@ export default {
         return {
             editor: false,
             editId: null,
+            poem: null,
             title: '',
             newLine: '',
             lines: [],
@@ -140,16 +142,27 @@ export default {
             this.newLine = '';
         },
         editPoem(poemTitle) {
-            let index = this.$root.$data.poems.findIndex( poem => poem.title == poemTitle);
+            let index = this.poems.findIndex( poem => poem.title == poemTitle);
             if (index === -1) {
                 this.editId = index;
             }
             else {
-                this.editId = this.$root.$data.poems[index].id;
+                this.editId = this.poems[index]._id;
+            }
+            this.getPoem();
+        },
+        async getPoem() {
+            this.error = '';
+            try {
+                let response = await axios.get("/api/poems/edit/" + this.editId);
+                this.poem = response.data;
+            } catch (error) {
+                this.error = error.response.data.message;
             }
         },
         closeEditor() {
             this.editId = null;
+            this.getPoems();
         }
     }
 }
@@ -168,6 +181,9 @@ export default {
     margin-top: 20px;
     margin-bottom: 25px;
     width: 100%;
+    background-color: rgba(203, 209, 216, 0.801);
+    padding: 8px;
+    border-radius: 15px 15px;
 }
 
 .poem-input > div, .poem-input > form, .poem-input > input, .poem-input > button {
