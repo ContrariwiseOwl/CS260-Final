@@ -10,6 +10,7 @@
                 <input type="text" v-model="newLine" placeholder="Add line to poem"/>
                 <button type="submit">Add Line</button>
             </form>
+            <button type="submit">Save &amp; Close</button>
         </form>
     </div>
 </template>
@@ -29,6 +30,9 @@ export default {
         addLine() {
             this.poem.content.push(this.newLine);
             this.newLine = '';
+        },
+        async updatePoem() {
+
         }
     }
 }

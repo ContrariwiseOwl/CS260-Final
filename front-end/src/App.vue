@@ -13,7 +13,8 @@
                 <b-nav-item to="/poetryhouse">Poetry House</b-nav-item>
                 <b-nav-item v-if="user" to="/mypoetry">My Poetry</b-nav-item>
                 <b-nav-item v-if="user" to="/dashboard">My Account</b-nav-item>
-                <b-nav-item v-else to="/dashboard">Log In</b-nav-item>
+                <b-nav-item v-if="!user" to="/dashboard">Log In</b-nav-item>
+                <b-nav-item v-else @click.prevent="logout()">Log Out</b-nav-item>
 
                 <!--<b-nav-item-dropdown text="Great Poets" right>
                     <b-dropdown-item href="#">Maya Angelou</b-dropdown-item>
@@ -44,10 +45,20 @@
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
     name: 'app',
     components: {
 
+    },
+    async created() {
+        try {
+            let response = await axios.get("/api/users");
+            this.$root.$data.user = response.data.user;
+        } catch (error) {
+            this.$root.$data.user = null;
+        }
     },
     mounted() {
         let externalScript = document.createElement('link');
@@ -76,6 +87,16 @@ export default {
         externalScript.setAttribute('rel', "stylesheet");
         externalScript.setAttribute('href', "https://fonts.googleapis.com/css2?family=Kanit:wght@300&display=swap");
         document.head.appendChild(externalScript);
+    },
+    methods: {
+        async logout() {
+            try {
+                await axios.delete("/api/users");
+                this.$root.$data.user = null;
+            } catch (error) {
+                this.$root.$data.user = null;
+            }
+        }
     },
     computed: {
         user() {

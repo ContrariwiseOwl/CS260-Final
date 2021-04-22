@@ -1,6 +1,6 @@
 <template>
 <div>
-    <form class="login-block" @submit.prevent="login">
+    <form class="login-block" @submit.prevent="login()">
         <fieldset>
             <legend>Login</legend>
             <input placeholder="username" v-model="usernameLogin" />
@@ -12,7 +12,7 @@
     </form>
     <p v-if="errorLogin">{{errorLogin}}</p>
 
-    <form @submit.prevent="register">
+    <form>
         <fieldset>
             <legend style="font-size: 1.2em;">New to I♡Poetry? Register for an account here!</legend>
             <input placeholder="first name" v-model="firstName" />
@@ -27,7 +27,7 @@
             <label>Use full name instead of username to sign poems.</label>
         </fieldset>
         <fieldset>
-            <button type="submit">Create Account</button>
+            <button type="submit" @click.prevent="register()">Create Account</button>
         </fieldset>
     </form>
     <p v-if="error">Error: {{error}}</p>
@@ -49,7 +49,8 @@ export default {
             password: '',
             namePreference: false,
             error: '',
-            errorLogin: ''
+            errorLogin: '',
+            testPhrase: ''
         }
     },
     methods: {
@@ -59,9 +60,13 @@ export default {
         async register() {
             this.error = '';
             this.errorLogin = '';
-            if (this.firstName || !this.lastName || !this.username || !this.password)
-                return;
+
             
+            if (!this.firstName || !this.lastName || !this.username || !this.password) {
+                this.testPhrase = "Register poorly made";
+                return;
+            }
+            this.testPhrase = "Register working";
             try {
                 let response = await axios.post("/api/users", {
                     firstName: this.firstName,
@@ -79,8 +84,10 @@ export default {
         async login() {
             this.error = '';
             this.errorLogin = '';
-            if (!this.usernameLogin || !this.passwordLogin)
+            if (!this.usernameLogin || !this.passwordLogin) {
+                this.errorLogin = "username and password required";
                 return;
+            }
 
             try {
                 let response = await axios.post("/api/users/login", {

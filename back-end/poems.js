@@ -13,10 +13,7 @@ const poemSchema = mongoose.Schema({
         type: mongoose.Schema.ObjectId,
         ref: "User"
     },
-    form: {
-        type: String,
-        default: "None"
-    },
+    form: String,
     written: {
         type: Date,
         default: Date.now
@@ -25,29 +22,29 @@ const poemSchema = mongoose.Schema({
 
 const Poem = mongoose.model('Poem', poemSchema);
 
+// create a new poem
 router.post('/', validUser, async (req, res) => {
     if (req.body.title === "" || req.body.content.length === 0)
         return res.status(400).send({
             message: "Poems require a title and at least one line of content."
         });
-
-    if (req.body.form === "") {
-        let poem = new Poem({
-            title: req.body.title,
-            content: req.body.content,
+    
+    try {
+        const oldPoem = await Poem.findOne({
+            title: req.params.title,
             author: req.user
         });
-    }
-    else {
+        if (oldPoem)
+            return res.status(400).send({
+                message: "You may not post poems with duplicate titles."
+            });
+
         let poem = new Poem({
             title: req.body.title,
             content: req.body.content,
             author: req.user,
             form: req.body.form
         });
-    }
-
-    try {
         await poem.save();
         return res.sendStatus(200);
     } catch (error) {
@@ -60,10 +57,10 @@ router.post('/', validUser, async (req, res) => {
 router.get("/", validUser, async (req, res) => {
     try {
         let poems = await Poem.find({
-            user: req.user
+            author: req.user
         }).sort({
             written: -1
-        }).populate('user');
+        }).populate('author');
         return res.send(poems);
     } catch (error) {
         console.log(error);
@@ -76,7 +73,7 @@ router.get("/all", async (req, res) => {
     try {
         let poems = await Poem.find().sort({
             written: -1
-        }).populate('user');
+        }).populate('author');
         return res.send(poems);
     } catch (error) {
         console.log(error);
@@ -101,39 +98,6 @@ router.get("/:id", async (req, res) => {
     }
 });
 
-// create a new poem
-router.post("/", validUser, async (req, res) => {
-    try {
-        const oldPoem = await Poem.findOne({
-            title: req.params.title,
-            author: req.user
-        });
-        if (poem)
-            return res.status(400).send({
-                message: "You may not post poems with duplicate titles."
-            });
-
-        if (req.body.form !== "") {
-            let poem = new Poem({
-                title: req.body.title,
-                content: req.body.content,
-                author: req.user,
-            });
-        }
-        else {
-            let poem = new Poem({
-                title: req.body.title,
-                content: req.body.content,
-                author: req.user,
-                form: req.body.form
-            });
-        }
-    } catch (error) {
-        console.log(error);
-        return res.sendStatus(500);
-    }
-});
-
 // update an edited poem
 router.put("/:id", validUser, async (req, res) => {
     try {
@@ -147,8 +111,7 @@ router.put("/:id", validUser, async (req, res) => {
         
         poem.title = req.body.title;
         poem.content = req.body.content;
-        if (req.body.form !== "")
-            poem.form = req.body.form;
+        poem.form = req.body.form;
         
         await poem.save();
         return res.send(poem);

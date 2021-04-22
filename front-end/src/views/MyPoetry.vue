@@ -5,18 +5,11 @@
                     <img src="/images/logo-mobile.png"/>
                     <h1>My Poetry</h1>
                 </div>
-        <div v-if="noName">
-            <div class="welcome">
-                <p>Write, edit, and submit your own poetry. Please be consistent about what name you write under.</p>
-            </div>
-            <div id="nameInput">
-                <form v-on:submit.prevent="logIn">
-                    <input type="text" v-model="userName"/>
-                    <button type="submit">Set User</button>
-                </form>
-            </div>
+        <div class="welcome">
+            <p>Write, edit, and submit your own poetry.</p>
         </div>
-        <div class="wrapper" v-else>
+        
+        <div class="wrapper">
             <div v-if="!editId || editId == -1">
                 
                 <form class="poem-input" v-on:submit.prevent="addPoem">
@@ -85,6 +78,7 @@
 <script>
 import PoetryList from '/src/components/PoetryList'
 import PoemEditor from '/src/components/PoemEditor'
+import axios from 'axios'
 
 export default {
     name: 'MyPoetry',
@@ -94,39 +88,52 @@ export default {
     },
     data() {
         return {
-            noName: true,
             editor: false,
             editId: null,
-            userName: '',
             title: '',
             newLine: '',
             lines: [],
             form: '',
+            poems: [],
+            error: '',
         }
     },
+    created() {
+        this.getPoems();
+    },
     computed: {
-        poems() {
-            return this.$root.$data.poems.filter( poem => poem.author == this.userName);
-        },
-        id() {
-            return this.$root.$data.poems.length + 1;
+        user() {
+            return this.$root.$data.user;
         }
     },
     methods: {
-        logIn() {
-            this.noName = false;
+        async getPoems() {
+            try {
+                let response = await axios.get("/api/poems");
+                this.poems = response.data;
+            } catch (error) {
+                this.error = "Error: " + error.response.data.message;
+            }
         },
-        addPoem() {
-            this.$root.$data.poems.push({
-                id: this.id,
-                title: this.title,
-                content: this.lines,
-                author: this.userName,
-                form: this.form
-            });
-            this.title = '';
-            this.lines = [];
-            this.form = '';
+        async addPoem() {
+            this.error = '';
+            try {
+                if (this.form === '')
+                    this.form = 'None';
+
+                await axios.post("/api/poems", {
+                    title: this.title,
+                    content: this.lines,
+                    form: this.form
+                })
+                this.title = '';
+                this.lines = [];
+                this.form = '';
+                this.getPoems();
+            } catch (error) {
+                this.error = "Error: " + error.response.data.message;
+            }
+            
         },
         addLine() {
             this.lines.push(this.newLine);

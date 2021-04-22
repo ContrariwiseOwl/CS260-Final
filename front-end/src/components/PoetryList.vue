@@ -1,7 +1,8 @@
 <template>
     <div class="poetry-list">
-        <div class="poem" v-for="poem in poems" :key="poem.id">
-            <p><strong>{{poem.title}}</strong> by {{poem.author}}</p>
+        <div class="poem" v-for="poem in poems" :key="poem._id">
+            <p v-if="poem.author.namePreference"><strong>{{poem.title}}</strong> by {{poem.author.firstName}} {{poem.author.lastName}}</p>
+            <p v-else><strong>{{poem.title}}</strong> by {{poem.author.username}}</p>
             <div class="stanza">
                 <ul>
                     <li v-for="line in poem.content" :key="line">{{line}}</li>
