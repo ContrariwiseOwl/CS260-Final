@@ -3,7 +3,7 @@
         <div class="background-page">
             <div class="main-page">
                 <div class="logo-box">
-                    <img src="/images/logo-mobile.png"/>
+                    <img src="../../legacy/images/logo-mobile.png"/>
                 </div>
 
                 <div class="daily-poem poem">

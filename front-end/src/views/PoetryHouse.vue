@@ -2,7 +2,7 @@
     <div class="background-page">
             <div class="main-page">
                 <div class="logo-box mini-logo-title">
-                    <img src="/images/logo-mobile.png"/>
+                    <img src="../../legacy/images/logo-mobile.png"/>
                     <h1>Poetry House<button id="resetButton" @click="reset()">Reset</button></h1>
                 </div>
 
