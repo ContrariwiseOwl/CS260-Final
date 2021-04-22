@@ -19,6 +19,13 @@ the profile picture uploader thing.
                     <p v-if="user.namePreference">Pen Name: {{user.firstName}} {{user.lastName}}</p>
                     <p v-else>Pen Name: {{user.username}}</p>
                 </div>
+                <form class="user-update" @submit.prevent="updateUser">
+                    <fieldset>
+                        <input type="checkbox" v-model="namePreference" @click="setPreference()" />
+                        <label>Use full name instead of username to sign poems.</label>
+                    </fieldset>
+                    <button type="submit">Save Changes</button>
+                </form>
             </div>
             <Login v-else />
 
@@ -63,12 +70,33 @@ export default {
     components: {
         Login
     },
+    data() {
+        return {
+            namePreference: false,
+            error: '',
+        }
+    },
     async created() {
         try {
             let response = await axios.get("/api/users");
             this.$root.$data.user = response.data.user;
+            this.namePreference = response.data.user.namePreference;
         } catch (error) {
             this.$root.$data.user = null;
+        }
+    },
+    methods: {
+        setPreference() {
+            this.namePreference = !this.namePreference;
+        },
+        async updateUser() {
+            try {
+                await axios.put("/api/users", {
+                    namePreference: this.namePreference
+                });
+            } catch (error) {
+                this.error = error.response;
+            }
         }
     },
     computed: {
@@ -78,3 +106,44 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+.profile{
+    width: 100%;
+}
+
+.account-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+    margin-bottom: 45px;
+    width: 50%;
+    background-color: rgba(203, 209, 216, 0.801);
+    padding: 8px;
+    border-radius: 15px 15px;
+}
+
+.account-info p {
+    text-align: left;
+    width: 100%;
+    padding-left: 43px;
+}
+
+.profile h3 {
+    text-align: center;
+}
+
+.user-update {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.user-update button {
+    border-radius: 5px 5px;
+    padding-right: 2px;
+    padding-left: 2px;
+}
+</style>

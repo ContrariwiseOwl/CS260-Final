@@ -148,6 +148,19 @@ router.post('/login', async (req, res) => {
         }
 });
 
+// update name preferences
+router.put('/', validUser, async (req, res) => {
+    try {
+        let user = req.user;
+        user.namePreference = req.body.namePreference;
+        await user.save();
+        res.sendStatus(200);
+    } catch (error) {
+        console.log(error);
+        res.sendStatus(500);
+    }
+})
+
 // update profile img
 router.put('/:file', validUser, async (req, res) => {
     try {
