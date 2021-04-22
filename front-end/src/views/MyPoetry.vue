@@ -142,14 +142,16 @@ export default {
             this.newLine = '';
         },
         editPoem(poemTitle) {
+            this.error = '';
             let index = this.poems.findIndex( poem => poem.title == poemTitle);
             if (index === -1) {
                 this.editId = index;
+                this.error = "no such poem exists!";
             }
             else {
                 this.editId = this.poems[index]._id;
+                this.getPoem();
             }
-            this.getPoem();
         },
         async getPoem() {
             this.error = '';
